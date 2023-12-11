@@ -1,11 +1,62 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head"
+import {
+  Avatar,
+  Box,
+  Button,
+  ChakraProvider,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react"
+import { WeaveDBLogo, WeaveDBLogoText } from "@/components/images/icons/icons"
+import { AddIcon } from "@chakra-ui/icons"
+import { useState, Fragment } from "react"
 
-const inter = Inter({ subsets: ['latin'] })
+const CardDeployment = () => {
+  return (
+    <>
+      <Flex flexDirection="column" padding="28px" border="1px">
+        <Flex
+          alignItems="center"
+          paddingBottom="28px"
+          justifyContent={{ base: "space-between", md: "space-between" }}
+        >
+          <Box
+            boxSize="40px"
+            borderRadius="full"
+            bgGradient="linear(to-br, #ae4c3c, #692dd1)"
+          />
+          <Text paddingLeft="8px">My Sample Rollup</Text>
+        </Flex>
+
+        <Flex justifyContent="space-between">
+          <Flex flexDirection="column">
+            <Text>Status</Text>
+            <Flex alignItems="center">
+              <Box borderRadius="full" bg="red.500" boxSize="16px" />
+              <Text paddingLeft="8px">Stopped</Text>
+            </Flex>
+          </Flex>
+
+          <Flex flexDirection="column" paddingLeft="28px">
+            <Text>Created</Text>
+            <Text>2 hours ago</Text>
+          </Flex>
+        </Flex>
+      </Flex>
+    </>
+  )
+}
 
 export default function Home() {
+  const [deployments, setDeployments] = useState([])
+  const deployRollup = async () => {
+    setDeployments((prevDeployments) => [
+      ...prevDeployments,
+      <CardDeployment key={prevDeployments.length} />,
+    ])
+  }
+
   return (
     <>
       <Head>
@@ -14,101 +65,41 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+      <ChakraProvider>
+        <Flex padding="28px" flexDirection="column" gap="48px">
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            // flexGrow="1"
           >
-            <h2>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+            <WeaveDBLogoText width="131px" height="29px" />
+            <Avatar />
+          </Flex>
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
+          <Flex justifyContent="flex-end">
+            <Button leftIcon={<AddIcon />} onClick={deployRollup}>
+              Deploy Rollup
+            </Button>
+          </Flex>
 
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
+          <Heading>Deployments</Heading>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Flex
+            gap="48px"
+            flexDirection={{ base: "column", md: "column" }}
+            paddingX={{ md: "488px" }}
           >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+            {deployments.map((deployment, index) => (
+              <Fragment key={index}>{deployment}</Fragment>
+            ))}
+          </Flex>
+
+          <Flex>
+            <Box />
+          </Flex>
+        </Flex>
+      </ChakraProvider>
     </>
   )
 }
